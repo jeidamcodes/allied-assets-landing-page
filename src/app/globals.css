@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-navy-deep: #0B1D3A;
+  --color-navy: #102C54;
+  --color-royal: #1B4FA0;
+  --color-royal-light: #2563C4;
+  --color-gold-dark: #9A7520;
+  --color-gold: #C49B2A;
+  --color-gold-light: #D4AD3C;
+  --color-gold-bright: #E4C252;
+  --color-ivory: #FAFBFC;
+  --color-slate-brand: #64748B;
+  --color-border-brand: #E2E8F0;
+
+  --font-fraunces: "Fraunces", serif;
+  --font-vietnam: "Be Vietnam Pro", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Outfit", sans-serif;
+  background: var(--color-ivory);
+  color: var(--color-navy-deep);
+  overflow-x: hidden;
+}
+
+/* ── Fade-up animation ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.7s ease both;
+}
+
+/* ── Lead form shared styles ── */
+.lf-input,
+.lf-select {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1.5px solid var(--color-border-brand);
+  border-radius: 8px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  color: var(--color-navy-deep);
+  background: #fafbfc;
+  outline: none;
+  appearance: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.lf-input::placeholder {
+  color: #b0bac9;
+}
+
+.lf-input:focus,
+.lf-select:focus {
+  border-color: var(--color-royal-light);
+  box-shadow: 0 0 0 3px rgba(37, 99, 196, 0.1);
+  background: #fff;
+}
+
+/* ── Comparison subgrid (CSS subgrid not easily done in Tailwind) ── */
+.compare-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1.06fr 1fr;
+  grid-template-rows: auto repeat(7, 1fr) auto;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12),
+    0 0 0 1.5px rgba(27, 79, 160, 0.12);
+}
+
+.ccol {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / 10;
+}
+
+.ccol-body {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 7;
+}
+
+/* ── Responsive comparison ── */
+@media (max-width: 960px) {
+  .compare-wrap {
+    transform: none !important;
+  }
+  .ccol.trad,
+  .ccol.investor {
+    display: none;
+  }
+  .ccol.allied {
+    transform: none !important;
+    box-shadow: none !important;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .compare-mobile {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 961px) {
+  .compare-mobile {
+    display: none !important;
+  }
+}
