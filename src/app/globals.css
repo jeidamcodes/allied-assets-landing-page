@@ -98,17 +98,7 @@ body {
 /* ── Responsive comparison ── */
 @media (max-width: 960px) {
   .compare-wrap {
-    transform: none !important;
-  }
-  .ccol.trad,
-  .ccol.investor {
-    display: none;
-  }
-  .ccol.allied {
-    transform: none !important;
-    box-shadow: none !important;
-    border-radius: 12px;
-    overflow: hidden;
+    display: none !important;
   }
   .compare-mobile {
     display: flex !important;

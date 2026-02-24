@@ -34,10 +34,10 @@ export default function FinalCTA() {
         <p className="mt-[18px] text-sm text-slate-brand text-center">
           Prefer to talk? Call us directly:{" "}
           <a
-            href="tel:3055550100"
+            href="tel:3056100310"
             className="text-navy-deep font-vietnam font-bold no-underline"
           >
-            (305) 555-0100
+            (305) 610-0310
           </a>
         </p>
       </div>
