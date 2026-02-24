@@ -1,8 +1,82 @@
 "use client";
 
+import { useState } from "react";
+
 export default function LeadForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const payload = {
+      property_address: formData.get("address") as string,
+      first_name: formData.get("fname") as string,
+      last_name: formData.get("lname") as string,
+      phone: formData.get("phone") as string,
+      email: formData.get("email") as string,
+      situation: formData.get("situation") as string,
+    };
+
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Something went wrong.");
+      }
+
+      setIsSuccess(true);
+      form.reset();
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Something went wrong."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-10 text-center">
+        <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[#F0FDF4]">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#166534"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <h3 className="font-vietnam font-bold text-[20px] text-navy">
+          {"We've Received Your Information!"}
+        </h3>
+        <p className="font-vietnam text-[14px] text-slate-brand leading-relaxed max-w-[320px]">
+          A member of our team will reach out to you shortly with your free cash
+          offer. No obligation.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <form className="flex flex-col gap-0" onSubmit={(e) => e.preventDefault()}>
+    <form className="flex flex-col gap-0" onSubmit={handleSubmit}>
       {/* Property Address */}
       <div className="mb-[11px]">
         <label className="block font-vietnam font-semibold text-[10px] tracking-[0.8px] uppercase text-slate-brand mb-[5px]">
@@ -13,6 +87,7 @@ export default function LeadForm() {
           type="text"
           placeholder="123 Ocean Drive, Miami, FL"
           name="address"
+          required
         />
       </div>
 
@@ -27,6 +102,7 @@ export default function LeadForm() {
             type="text"
             placeholder="First name"
             name="fname"
+            required
           />
         </div>
         <div className="mb-[11px]">
@@ -38,6 +114,7 @@ export default function LeadForm() {
             type="text"
             placeholder="Last name"
             name="lname"
+            required
           />
         </div>
       </div>
@@ -52,6 +129,7 @@ export default function LeadForm() {
           type="tel"
           placeholder="(305) 000-0000"
           name="phone"
+          required
         />
       </div>
 
@@ -65,6 +143,7 @@ export default function LeadForm() {
           type="email"
           placeholder="you@email.com"
           name="email"
+          required
         />
       </div>
 
@@ -88,12 +167,20 @@ export default function LeadForm() {
         </select>
       </div>
 
+      {/* Error message */}
+      {errorMessage && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-[10px_14px] mb-2 text-[12px] text-red-700 font-semibold font-vietnam">
+          {errorMessage}
+        </div>
+      )}
+
       {/* Submit */}
       <button
         type="submit"
-        className="w-full py-[17px] mt-1 bg-linear-to-br from-royal to-royal-light text-white border-none rounded-[9px] font-vietnam font-extrabold text-[15px] cursor-pointer transition-all duration-200 shadow-[0_6px_20px_rgba(27,79,160,0.4)] hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(27,79,160,0.55)]"
+        disabled={isSubmitting}
+        className="w-full py-[17px] mt-1 bg-linear-to-br from-royal to-royal-light text-white border-none rounded-[9px] font-vietnam font-extrabold text-[15px] cursor-pointer transition-all duration-200 shadow-[0_6px_20px_rgba(27,79,160,0.4)] hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(27,79,160,0.55)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
       >
-        Get My Free Cash Offer Now →
+        {isSubmitting ? "Submitting..." : "Get My Free Cash Offer Now →"}
       </button>
 
       {/* Commitment */}
